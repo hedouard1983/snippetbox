@@ -6,7 +6,12 @@ import (
 // Defin a home handler function which writes a byte slice containing
 // "Hello from SnippetBox" as the body response
 func home(w http.ResponseWriter, r *http.Request) {
-        w.Write ([]byte("Hello from Snippetbox"))
+	//CHeck if the current request URL PATH exactly matches "/"
+	if r.URL.Path != "/"{
+		http.NotFound(w, r)
+		return
+	}
+	w.Write ([]byte("Hello from Snippetbox"))
 }
 
 func  showSnippet(w http.ResponseWriter, r *http.Request){
@@ -14,7 +19,13 @@ func  showSnippet(w http.ResponseWriter, r *http.Request){
 }
 
 func createSnippet(w http.ResponseWriter, r *http.Request){
-        w.Write ([]byte ("Create a new Snippet...."))
+	// Us r.Method to check whether the request is using POST or not
+	if  r.Method != http.MethodPost{
+	w.Header().Set("Allow", http.MethodPost)
+	http.Error(w, "Method Now Allowed", 405)
+	return
+	}
+	w.Write ([]byte ("Create a new Snippet...."))
 }
 func main(){
         // use the http.NewServMux() function to initialize a new servemux, then
