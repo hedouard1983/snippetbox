@@ -1,7 +1,9 @@
 package main
 import (
-        "log"
+        "fmt"
+	"log"
         "net/http"
+	"strconv"
 )
 // Defin a home handler function which writes a byte slice containing
 // "Hello from SnippetBox" as the body response
@@ -15,8 +17,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func  showSnippet(w http.ResponseWriter, r *http.Request){
-        w.Write ([]byte("Displaye a specific Snippet...."))
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 1{
+		http.NotFound()
+	}
+	w.Write ([]byte("Displays a specific Snippet...."))
 }
+	//Test Changes
 
 func createSnippet(w http.ResponseWriter, r *http.Request){
 	// Us r.Method to check whether the request is using POST or not
